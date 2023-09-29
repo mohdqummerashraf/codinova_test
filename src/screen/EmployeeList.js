@@ -85,7 +85,11 @@ const EmployeeList = () => {
                                     fontSize:18
 
                                 }}>{item.firstName} {item.lastName}</Text>
-                                <Text>{item.jobTitle}</Text>
+                                <Text 
+                                style={{
+                                    color:'grey'
+                                }}
+                                >{item.jobTitle}</Text>
                             </View>
                             <TouchableOpacity
                                 onPress={() => addToFavourite(item)}
