@@ -157,7 +157,8 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '70%',
-        marginVertical: '2%'
+        marginVertical: '2%',
+        color:'#000'
     },
     headingStyle: {
         color: 'rgba(0, 170, 58, 0.8)',
