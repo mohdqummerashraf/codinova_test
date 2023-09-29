@@ -13,7 +13,7 @@ const EmployeeForm = () => {
 
     const dispatch = useDispatch();
     const navigation = useNavigation()
-    const employeeList = useSelector(state => state.employee.data || []);
+    const employeeList = useSelector(state => state.employee || []);
 
 
     const [employeeDetail, setEmployeeDetail] = useState({
@@ -24,20 +24,41 @@ const EmployeeForm = () => {
         salary: null
     });
 
+    const [alertName, setAlertName] = useState('');
+
     const handleInputChange = (inputName, inputValue) => {
         setEmployeeDetail({ ...employeeDetail, [inputName]: inputValue })
     }
 
-    const addEmployee = async () => {
-        const payLoad = {
-            firstName: employeeDetail.fName,
-            lastName: employeeDetail.lName,
-            jobTitle: employeeDetail.jobTitle,
-            salary: employeeDetail.salary
+    const addEmployee = () => {
+        if (employeeDetail.fName == '') {
+            setAlertName('First Name')
         }
-        dispatch(addEmployeeAction(payLoad));
-        navigation.navigate('Home')
+        else if (employeeDetail.lName == '') {
+            setAlertName('Last Name')
+        } else if (employeeDetail.email == '') {
+            setAlertName('Email');
+        } else if (employeeDetail.jobTitle == '') {
+            setAlertName('Job Title');
+        } else if (employeeDetail.salary == null) {
+            setAlertName('Salary');
+        }
 
+        if (employeeDetail.fName !== '' && employeeDetail.lName !== '' && employeeDetail.email !== '' && employeeDetail.salary !== null && employeeDetail.jobTitle !== '') {
+            const payLoad = {
+                id: employeeList.data && employeeList.data.length > 0 ? employeeList.data.length + 1 : 1,
+                firstName: employeeDetail.fName,
+                lastName: employeeDetail.lName,
+                jobTitle: employeeDetail.jobTitle,
+                salary: employeeDetail.salary
+            }
+            console.log("payload", payLoad);
+            dispatch(addEmployeeAction(payLoad));
+            navigation.navigate('Home')
+
+        } else {
+            Alert.alert(`Please fill the ${alertName} detail`);
+        }
     }
 
 
@@ -77,6 +98,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.email}
                     name="email"
+                    keyboardType='email-address'
                     onChangeText={value => handleInputChange('email', value)}
                 />
                 <TextInput
@@ -93,6 +115,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.salary}
                     name="salary"
+                    keyboardType='numeric'
                     onChangeText={value => handleInputChange('salary', value)}
                 />
 
@@ -106,7 +129,7 @@ const EmployeeForm = () => {
                         borderRadius: 10,
                         marginVertical: '4%'
                     }}
-                    onPress={addEmployee}
+                    onPress={() => addEmployee()}
                 >
                     <Text
                         style={{

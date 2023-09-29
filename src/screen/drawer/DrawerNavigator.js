@@ -9,7 +9,11 @@ const DrawerNavigator = () => {
     return (
 
         <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}>
-            <Drawer.Screen name='mainPage' component={Appnavigator} />
+            <Drawer.Screen name='Inbox' component={Appnavigator} 
+            options={{
+                headerShown:false
+            }}
+            />
         </Drawer.Navigator>
 
     )

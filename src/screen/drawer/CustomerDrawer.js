@@ -1,54 +1,58 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
-
+ 
 const CustomDrawer = () => {
-    const employee = useSelector(state => state.employee.data);
+    const employeeList = useSelector(state => state.employee || []);
+    
     return (
-        <View style={
-            style.drawerContainer
-        }>
-            <View style={{
-                flexDirection: 'row',
-                marginVertical: '3%'
-            }}>
-                <Text style={{
-                    fontSize: 20,
-                    color: '#000',
-                    fontWeight: 600
+        <>
+            <View style={
+                style.drawerContainer
+            }>
+                <View style={{
+                    flexDirection: 'row',
+                    marginVertical: '3%'
                 }}>
-                    Total Employee :-
-                </Text>
-                <Text style={{
-                    fontSize: 20,
-                    color: '#000',
-                    fontWeight: 400,
-                    marginHorizontal: 5
+                    <Text style={{
+                        fontSize: 20,
+                        color: '#000',
+                        fontWeight: 600
+                    }}>
+                        Total Employee :-
+                    </Text>
+                    <Text style={{
+                        fontSize: 20,
+                        color: '#000',
+                        fontWeight: 400,
+                        marginHorizontal: 5
+                    }}>
+                        {employeeList.data.length}
+                    </Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    marginVertical: '3%'
                 }}>
-                    {employee.length}
-                </Text>
+                    <Text style={{
+                        fontSize: 20,
+                        color: '#000',
+                        fontWeight: 600
+                    }}>
+                        Favourite Employee :-
+                    </Text>
+                    <Text style={{
+                        fontSize: 20,
+                        color: '#000',
+                        fontWeight: 400,
+                        marginHorizontal: 5
+                    }}>
+                        {employeeList?.data?.length > 0 ? employeeList.data.filter(item => item.isFavourite).length : 0}
+                    </Text>
+                </View>
             </View>
-            <View style={{
-                flexDirection: 'row',
-                marginVertical: '3%'
-            }}>
-                <Text style={{
-                    fontSize: 20,
-                    color: '#000',
-                    fontWeight: 600
-                }}>
-                    Favourite Employee :-
-                </Text>
-                <Text style={{
-                    fontSize: 20,
-                    color: '#000',
-                    fontWeight: 400,
-                    marginHorizontal: 5
-                }}>
-                    {employee.length}
-                </Text>
-            </View>
-        </View>
+            
+        </>
     )
 }
 
