@@ -82,6 +82,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.fName}
                     name="fName"
+                    
                     onChangeText={value => handleInputChange('fName', value)}
                 />
                 <TextInput
@@ -90,6 +91,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.lName}
                     name="lName"
+                    
                     onChangeText={value => handleInputChange('lName', value)}
                 />
                 <TextInput
@@ -98,6 +100,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.email}
                     name="email"
+                   
                     keyboardType='email-address'
                     onChangeText={value => handleInputChange('email', value)}
                 />
@@ -158,7 +161,9 @@ const styles = StyleSheet.create({
     input: {
         width: '70%',
         marginVertical: '2%',
-        color:'#000'
+        color:'#000',
+        borderBottomWidth:1,
+        borderBottomColor:'rgba(0, 170, 58, 0.8)'
     },
     headingStyle: {
         color: 'rgba(0, 170, 58, 0.8)',

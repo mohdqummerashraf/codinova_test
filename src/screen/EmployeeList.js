@@ -102,7 +102,7 @@ const EmployeeList = () => {
                                     <FontAwesome
                                         name="star-o"
                                         size={30}
-                                        color='yellow'
+                                        color='#000'
                                     />
 
                                 }
