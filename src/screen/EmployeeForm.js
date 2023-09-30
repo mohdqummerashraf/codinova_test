@@ -63,7 +63,7 @@ const EmployeeForm = () => {
 
 
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={"handled"} >
 
             <View style={styles.formHeading}>
                 <Text

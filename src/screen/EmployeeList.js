@@ -17,7 +17,6 @@ const EmployeeList = () => {
 
     const employeeList = useSelector(state => state.employee || []);
     const [employeeData, setEmployeeData] = useState(employeeList.data)
-    const [isSort, setIsSort] = useState(false);
     const [showSortCard, setShowSortCard] = useState(false);
 
 
@@ -31,9 +30,8 @@ const EmployeeList = () => {
         const sortedByName = employeeList.data.sort(function (a, b) {
             return a[type].localeCompare(b[type]);
         });
-        setEmployeeData(sortedByName);
-        setIsSort((pre) => !pre);
-        setShowSortCard(prev => !prev)
+        setEmployeeData([...sortedByName]);
+         setShowSortCard(prev => !prev)
 
     }
 
@@ -42,6 +40,7 @@ const EmployeeList = () => {
         setEmployeeData(employeeList.data)
 
     }, [employeeList.data])
+
 
     return (
         <>
@@ -84,7 +83,9 @@ const EmployeeList = () => {
                                     color:'#000',
                                     fontSize:18
 
-                                }}>{item.firstName} {item.lastName}</Text>
+                              
+                              
+                              }}>{item.firstName} {item.lastName}</Text>
                                 <Text 
                                 style={{
                                     color:'grey'
