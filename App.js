@@ -13,7 +13,6 @@ import { Provider, useSelector } from 'react-redux';
 
 import store from './src/store/store';
 import DrawerNavigator from './src/screen/drawer/DrawerNavigator';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const RenderInitalScreen = () => {
   const employeeList = useSelector(state => state.employee || []);
@@ -35,15 +34,14 @@ function App() {
 
   return (
     <Provider store={store}>
-      <GestureHandlerRootView style={{ flex: 1 }} >
-        <SafeAreaView style={{
-          flex: 1
-        }}>
-          <NavigationContainer>
-            <RenderInitalScreen />
-          </NavigationContainer>
-        </SafeAreaView>
-      </GestureHandlerRootView>
+
+      <SafeAreaView style={{
+        flex: 1
+      }}>
+        <NavigationContainer>
+          <RenderInitalScreen />
+        </NavigationContainer>
+      </SafeAreaView>
     </Provider>
 
   )
