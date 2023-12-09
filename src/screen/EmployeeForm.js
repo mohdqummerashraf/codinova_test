@@ -1,10 +1,9 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native'
 import React from 'react'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEmployeeAction } from '../action/addEmployeeAction';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -13,7 +12,7 @@ const EmployeeForm = () => {
 
     const dispatch = useDispatch();
     const navigation = useNavigation()
-    const employeeList = useSelector(state => state.employee.data || []);
+    const employeeList = useSelector(state => state.employee || []);
 
 
     const [employeeDetail, setEmployeeDetail] = useState({
@@ -24,24 +23,45 @@ const EmployeeForm = () => {
         salary: null
     });
 
+    const [alertName, setAlertName] = useState('');
+
     const handleInputChange = (inputName, inputValue) => {
         setEmployeeDetail({ ...employeeDetail, [inputName]: inputValue })
     }
 
-    const addEmployee = async () => {
-        const payLoad = {
-            firstName: employeeDetail.fName,
-            lastName: employeeDetail.lName,
-            jobTitle: employeeDetail.jobTitle,
-            salary: employeeDetail.salary
+    const addEmployee = () => {
+        if (employeeDetail.fName == '') {
+            setAlertName('First Name')
         }
-        dispatch(addEmployeeAction(payLoad));
-        navigation.navigate('Home')
+        else if (employeeDetail.lName == '') {
+            setAlertName('Last Name')
+        } else if (employeeDetail.email == '') {
+            setAlertName('Email');
+        } else if (employeeDetail.jobTitle == '') {
+            setAlertName('Job Title');
+        } else if (employeeDetail.salary == null) {
+            setAlertName('Salary');
+        }
 
+        if (employeeDetail.fName !== '' && employeeDetail.lName !== '' && employeeDetail.email !== '' && employeeDetail.salary !== null && employeeDetail.jobTitle !== '') {
+            const payLoad = {
+                id: employeeList.data && employeeList.data.length > 0 ? employeeList.data.length + 1 : 1,
+                firstName: employeeDetail.fName,
+                lastName: employeeDetail.lName,
+                jobTitle: employeeDetail.jobTitle,
+                salary: employeeDetail.salary
+            }
+            console.log("payload", payLoad);
+            dispatch(addEmployeeAction(payLoad));
+            navigation.navigate('Home')
+
+        } else {
+            Alert.alert(`Please fill the ${alertName} detail`);
+        }
     }
 
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={"handled"} >
 
             <View style={styles.formHeading}>
                 <Text
@@ -59,6 +79,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.fName}
                     name="fName"
+                    
                     onChangeText={value => handleInputChange('fName', value)}
                 />
                 <TextInput
@@ -67,6 +88,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.lName}
                     name="lName"
+                    
                     onChangeText={value => handleInputChange('lName', value)}
                 />
                 <TextInput
@@ -75,6 +97,8 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.email}
                     name="email"
+                   
+                    keyboardType='email-address'
                     onChangeText={value => handleInputChange('email', value)}
                 />
                 <TextInput
@@ -91,6 +115,7 @@ const EmployeeForm = () => {
                     placeholderTextColor="rgba(44, 44, 44, 0.61)"
                     value={employeeDetail.salary}
                     name="salary"
+                    keyboardType='numeric'
                     onChangeText={value => handleInputChange('salary', value)}
                 />
 
@@ -104,7 +129,7 @@ const EmployeeForm = () => {
                         borderRadius: 10,
                         marginVertical: '4%'
                     }}
-                    onPress={addEmployee}
+                    onPress={() => addEmployee()}
                 >
                     <Text
                         style={{
@@ -132,7 +157,10 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '70%',
-        marginVertical: '2%'
+        marginVertical: '2%',
+        color:'#000',
+        borderBottomWidth:1,
+        borderBottomColor:'rgba(0, 170, 58, 0.8)'
     },
     headingStyle: {
         color: 'rgba(0, 170, 58, 0.8)',

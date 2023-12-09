@@ -5,3 +5,10 @@ export const addEmployeeAction = (data) => {
         payload: data,
     }
 };
+export const addFavEmployeeAction = (id) => {
+
+    return {
+        type: "ADD_FAV",
+        payload: id,
+    }
+};

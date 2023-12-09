@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import CustomHeader from './CustomHeader';
-import { addEmployeeAction } from '../action/addEmployeeAction';
+import { addFavEmployeeAction } from '../action/addEmployeeAction';
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 
 const EmployeeList = () => {
@@ -16,89 +16,112 @@ const EmployeeList = () => {
     const dispatch = useDispatch();
 
     const employeeList = useSelector(state => state.employee || []);
+    const [employeeData, setEmployeeData] = useState(employeeList.data)
+    const [showSortCard, setShowSortCard] = useState(false);
 
-    console.log("employeeList", employeeList)
+
 
     const addToFavourite = (item) => {
-        console.log("item", item);
-
-        const newObj = employeeList.data.map(val => {
-
-            if (val.id == item.id) {
-                return { ...val, isFavourite: true };
-            } else {
-                return { ...val, name: 'false' };
-            }
-
-        });
-
-
-        console.log("newObj", newObj)
-        // dispatch(addEmployeeAction(newObj))
-
-        /*   const indexVal = employeeData.findIndex(value => value.id == 2);
-          console.log("indexVal", indexVal);
-          if (item.favourite) {
-              employeeData[indexVal].favourite = false
-          } else {
-              employeeData[indexVal].favourite = true
-          } */
+        dispatch(addFavEmployeeAction(item))
     }
 
 
-    const renderEmployee = ({ item }) => (
+    const sortArray = (type) => {
+        const sortedByName = employeeList.data.sort(function (a, b) {
+            return a[type].localeCompare(b[type]);
+        });
+        setEmployeeData([...sortedByName]);
+         setShowSortCard(prev => !prev)
 
-        < View style={style.card}>
-            <Text
-                style={{
+    }
 
-                    flexGrow: 1
-                }}
-            >Image</Text>
-            <View
-                style={{
 
-                    flexGrow: 2
-                }}
-            >
-                <Text>{item.firstName} {item.lastName}</Text>
-                <Text>{item.jobTitle}</Text>
-            </View>
-            <TouchableOpacity
-                onPress={() => addToFavourite(item)}
-                style={{
+    useEffect(() => {
+        setEmployeeData(employeeList.data)
 
-                    flexGrow: 1
-                }}
-            >
-                {item.isFavourite ?
-                    <FontAwesome
-                        name="star"
-                        size={20}
-                        color='yellow'
+    }, [employeeList.data])
 
-                    />
-                    :
-                    <FontAwesome
-                        name="star-o"
-                        size={20}
-                        color='yellow'
-                    />
 
-                }
-            </TouchableOpacity>
-
-        </View>
-    )
     return (
         <>
-            <CustomHeader />
-            <FlatList
-                data={employeeList.data || []}
-                renderItem={renderEmployee}
-            // keyExtractor={}
+            <CustomHeader sortArray={sortArray} setShowSortCard={setShowSortCard} showSortCard={showSortCard} />
+            <View
+                style={{
+                    paddingBottom: '20%'
+                }}
+            >
+                <FlatList
+                    data={employeeData || []}
+                    renderItem={({ item, index }) => (
+                        < View style={style.card}>
+                            <View
+                                style={{
+                                    marginHorizontal: 10
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        backgroundColor: 'rgb(0, 170, 58)',
+                                        borderRadius: 40,
+                                        textAlign: 'center',
+                                        padding: 7,
+                                        fontSize: 20,
+                                        fontWeight: 600
+                                    }}
+                                >{item.firstName.slice(0, 1)}{item.lastName.slice(0, 1)}</Text>
+                            </View>
+                            <View
+                                style={{
 
-            />
+                                    flexGrow: 2,
+                                    marginHorizontal: 10,
+
+                                }}
+                            >
+                                <Text style={{
+                                    fontWeight: 600,
+                                    color:'#000',
+                                    fontSize:18
+
+                              
+                              
+                              }}>{item.firstName} {item.lastName}</Text>
+                                <Text 
+                                style={{
+                                    color:'grey'
+                                }}
+                                >{item.jobTitle}</Text>
+                            </View>
+                            <TouchableOpacity
+                                onPress={() => addToFavourite(item)}
+
+                            >
+                                {item.isFavourite ?
+                                    <FontAwesome
+                                        name="star"
+                                        size={30}
+                                        color='yellow'
+
+                                    />
+                                    :
+                                    <FontAwesome
+                                        name="star-o"
+                                        size={30}
+                                        color='#000'
+                                    />
+
+                                }
+                            </TouchableOpacity>
+
+                        </View>
+                    )}
+                    keyExtractor={
+                        (item) => item.id.toString()
+                    }
+
+
+                />
+            </View >
             <View style={{
                 flex: 1,
 
@@ -125,15 +148,28 @@ const EmployeeList = () => {
 
 const style = StyleSheet.create({
     card: {
+        width: "90%",
+        height: 70,
         backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: '#0000001C',
+        justifyContent: 'space-between',
+        flexDirection: "row",
+        alignItems: "center",
+        shadowColor: "#0000001C",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 4,
+        elevation: 4,
+        paddingHorizontal: 10,
         marginHorizontal: '5%',
-        marginVertical: '2%',
-        flexDirection: 'row',
-        padding: '3%',
-        borderRadius: 5
+        marginVertical: '3%'
     },
     addBtn: {
-        backgroundColor: 'rgba(0, 170, 58, 0.8)',
+        backgroundColor: 'rgb(0, 170, 58)',
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
