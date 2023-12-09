@@ -40,8 +40,6 @@ const EmployeeForm = () => {
 
     }
 
-
-
     return (
         <ScrollView>
 

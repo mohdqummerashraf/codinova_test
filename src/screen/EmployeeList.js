@@ -27,7 +27,7 @@ const EmployeeList = () => {
             if (val.id == item.id) {
                 return { ...val, isFavourite: true };
             } else {
-                return { ...val, name: 'Alice' };
+                return { ...val, name: 'false' };
             }
 
         });
